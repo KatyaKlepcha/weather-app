@@ -1,19 +1,12 @@
-import {configureStore, ThunkAction, Action, getDefaultMiddleware} from '@reduxjs/toolkit';
+import {Action, configureStore, ThunkAction} from '@reduxjs/toolkit';
 import {appReducer} from "./app.slice";
-import {weatherReducer} from "../features/weather/weather.slice";
-import {citiesReducer} from "../common/components/Cities/cities.slice";
+import {citiesWeatherReducer} from "../common/components/CitiesWeather/citiesWeather.slice";
 
 export const store = configureStore({
     reducer: {
         app: appReducer,
-        weather: weatherReducer,
-        cities: citiesReducer
-    },
-    middleware: [
-        ...getDefaultMiddleware({
-            serializableCheck: false,
-        }),
-    ],
+        citiesWeather: citiesWeatherReducer
+    }
 });
 
 export type AppDispatch = typeof store.dispatch;

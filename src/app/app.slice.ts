@@ -7,6 +7,7 @@ const slice = createSlice({
     initialState: {
         error: null as string | null,
         status: "idle" as RequestStatusType,
+        isInitialized: false
     },
     reducers: {
         setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
@@ -15,6 +16,9 @@ const slice = createSlice({
         setAppError: (state, action: PayloadAction<{ error: null | string }>) => {
             state.error = action.payload.error;
         },
+        setInitialized: (state, action: PayloadAction<{ initializeStatus: boolean }>)=>{
+            state.isInitialized = action.payload.initializeStatus
+        }
     },
 });
 

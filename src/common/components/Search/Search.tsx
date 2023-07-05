@@ -1,33 +1,24 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from './Search.module.css'
-import {weatherThunks} from "../../../features/weather/weather.slice";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {citySelector} from "../../../features/weather/weather.selectors";
 import {useDebounce} from "../../hooks/useDebounce";
+import {citiesWeatherThunks} from "../CitiesWeather/citiesWeather.slice";
 
 const Search = () => {
-    const cityName = useAppSelector(citySelector)
-    const [searchCity, setSearchCity] = useState(cityName)
+    const [searchCity, setSearchCity] = useState('')
     const debouncedSearchCity = useDebounce(searchCity, 500)
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {}, [debouncedSearchCity])
 
-    // useEffect(()=>{
-    //     dispatch(weatherThunks.getSummaryWeather({location: city}))
-    // },[city])
-
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchCity(e.currentTarget.value)
-        console.log(e.currentTarget.value)
     }
 
     const onAddCity = () => {
+        dispatch(citiesWeatherThunks.findCity(searchCity))
         setSearchCity('')
-        dispatch(weatherThunks.getSummaryWeather({location: searchCity}))
-        // dispatch()
     }
 
     return (

@@ -1,36 +1,27 @@
-import React from 'react';
+import React, {FC} from 'react';
 import s from './City.module.css'
 import close from '../../images/close.svg'
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {
-    citySelector,
-    countrySelector,
-    dateSelector,
-    feelsLikeSelector,
-    humiditySelector,
-    pressureSelector,
-    tempSelector,
-    weatherSelector,
-    windSelector
-} from "../../../features/weather/weather.selectors";
 import {tempCalculation} from "../../helpers/tempCalculation";
+import {WeatherResponseType} from "../../../features/weather/weather-api";
 
-const City = () => {
-    const city = useAppSelector(citySelector)
-    const date = useAppSelector(dateSelector)
-    const wind = useAppSelector(windSelector)
-    const temp = useAppSelector(tempSelector)
-    const feelsLike = useAppSelector(feelsLikeSelector)
-    const humidity = useAppSelector(humiditySelector)
-    const pressure = useAppSelector(pressureSelector)
-    const country = useAppSelector(countrySelector)
-    const weather = useAppSelector(weatherSelector)
+type CityPropsType = {
+    city: string
+    weather: WeatherResponseType
+}
 
-    const weatherDescription = weather.map(m => m.main)
-    const weatherIcon = weather.map(m => m.icon)
+const City: FC<CityPropsType> = ({city, weather}) => {
+    // const date = useAppSelector(dateSelector)
+    const wind = weather.wind
+    const temp = weather.main.temp
+    const feelsLike = weather.main.feels_like
+    const humidity = weather.main.humidity
+    const pressure = weather.main.pressure
+    const country = weather.sys.country
+
+    const weatherDescription = weather.weather.description
+    const weatherIcon = weather.weather.icon
 
     const onCloseHandler = () => {
-
     }
 
     const onChangeDegrees = () => {
@@ -41,9 +32,9 @@ const City = () => {
         <div className={s.wrapper}>
             <div className={s.cityBlock}>
                 <div className={s.cityWrapper}>
-                    <span>{city}, </span>
+                    <span> {city}</span>
                     <span>{country}</span>
-                    <div>{date}</div>
+                    {/*<div>{date}</div>*/}
                 </div>
                 <img src={`http://openweathermap.org/img/w/${weatherIcon}.png`} alt={"weather"} className={s.icon}/>
                 <div>
