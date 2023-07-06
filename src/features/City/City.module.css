@@ -14,12 +14,16 @@
     justify-content: space-between;
 }
 
-.cityWrapper{
+.cityWrapper {
     text-align: start;
 }
 
-.icon{
+.icon {
     align-self: start;
+}
+
+.iconClose {
+    cursor: pointer;
 }
 
 .temperatureBlock {
@@ -28,6 +32,13 @@
     text-align: end;
 }
 
-.degrees {
+.degrees button {
     cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+.selectButton {
+    font-weight: 900;
+    font-size: 25px;
 }

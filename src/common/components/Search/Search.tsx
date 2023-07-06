@@ -2,7 +2,7 @@ import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from './Search.module.css'
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {useDebounce} from "../../hooks/useDebounce";
-import {citiesWeatherThunks} from "../CitiesWeather/citiesWeather.slice";
+import {citiesWeatherThunks} from "../../../features/CitiesWeather/citiesWeather.slice";
 
 const Search = () => {
     const [searchCity, setSearchCity] = useState('')

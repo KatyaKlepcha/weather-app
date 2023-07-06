@@ -1,7 +1,7 @@
-import {instance} from "../../constants/instance";
-import {CoordType} from "../../../features/weather/weather-api";
+import {instance} from "../../common/constants/instance";
+import {CoordType} from "../weather/weather-api";
 
-export const citiesAPI = {
+export const citiesWeatherAPI = {
     findCity(cityName: string) {
         return instance.get<{
             city: FindCityResponseType

@@ -1,14 +1,16 @@
 import {instance} from "../../common/constants/instance";
 
 export const weatherAPI = {
-    getSummary(arg: GetSummaryType){
+    getSummary(arg: GetSummaryType) {
         return instance.get<WeatherResponseType>(`weather?q=${arg.location}&appid=d8b8feb797d8d7246525255551517358&units=${arg?.degrees}`)
     }
 }
 
+type DegreesTempType = 'metric' | 'imperial'
+
 export type GetSummaryType = {
     location: string
-    degrees?: any
+    degrees?: DegreesTempType
 }
 
 export type WeatherResponseType = {
@@ -23,7 +25,7 @@ export type WeatherResponseType = {
     sys: SysType
     timezone: number
     visibility: number
-    weather: WeatherType
+    weather: WeatherType[]
     wind: WindType
 }
 
