@@ -1,5 +1,14 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.select {
+    align-self: end;
+}
+
 .citiesWrapper {
     display: grid;
     gap: 25px;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))
+    grid-template-columns: repeat(3, minmax(min-content, max-content))
 }

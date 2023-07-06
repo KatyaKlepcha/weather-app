@@ -9,6 +9,13 @@
     justify-content: space-between
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
 .cityBlock {
     display: flex;
     justify-content: space-between;
@@ -18,12 +25,28 @@
     text-align: start;
 }
 
+.cityWrapper span {
+    font-weight: 500;
+}
+
+.descriptionWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.description {
+    opacity: 0.3;
+}
+
 .icon {
     align-self: start;
 }
 
 .iconClose {
+    width: 10px;
+    height: 10px;
     cursor: pointer;
+    align-self: end;
 }
 
 .temperatureBlock {
@@ -32,13 +55,40 @@
     text-align: end;
 }
 
+.tempWrapper {
+    display: flex;
+}
+
+.temp {
+    font-size: 32px;
+}
+
+.degrees {
+    font-size: 20px;
+}
+
 .degrees button {
     cursor: pointer;
     border: none;
     background-color: transparent;
+    font-size: 20px;
+}
+
+.feelsLike {
+    opacity: 0.3;
+    font-size: 14px;
+    text-align: start;
 }
 
 .selectButton {
     font-weight: 900;
     font-size: 25px;
+}
+
+.information {
+    font-weight: 500;
+}
+
+.item {
+    color: orangered;
 }

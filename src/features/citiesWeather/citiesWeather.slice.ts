@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {GetSummaryType, weatherAPI, WeatherResponseType} from "../weather/weather-api";
+import {GetSummaryType, weatherApi, WeatherResponseType} from "../weather/weather.api";
 import {appActions} from "../../app/app.slice";
-import {citiesWeatherAPI} from "./citiesWeather.api";
+import {citiesWeatherAPI, LangType} from "./citiesWeather.api";
 
 const initialState = {
     citiesWeather: {} as CitiesWeatherType
@@ -18,7 +18,7 @@ const getSummaryWeather = createAsyncThunk<{
     const {dispatch, rejectWithValue} = thunkAPI
     dispatch(appActions.setAppStatus({status: "loading"}))
     try {
-        const res = await weatherAPI.getSummary({location: arg.location, degrees: arg.degrees} as GetSummaryType)
+        const res = await weatherApi.getSummary({location: arg.location, degrees: arg.degrees} as GetSummaryType)
         dispatch(appActions.setAppStatus({status: "idle"}))
         // if (arg.degrees === 'metric') thunkAPI.dispatch(setCelcius(true))
         // if (arg.degrees === 'imperial') thunkAPI.dispatch(setFahrenheit(true))
@@ -37,28 +37,25 @@ const findCity = createAsyncThunk<any, string>('citiesWeather/findCity', async (
         const city = res.data.city.name
 
         dispatch(appActions.setAppStatus({status: "idle"}))
-        // const test = getFromLocalStorage('current-city')
-        // setToLocalStorage([city, ...test ], 'current-city')
-        // dispatch(citiesWeatherActions.setCities({cities: [city, ...test]}))
         dispatch(citiesWeatherThunks.getSummaryWeather({location: city}))
     } catch (e) {
         return rejectWithValue(null)
     }
 })
 
-// const firstLoading = createAsyncThunk<any, string[]>('citiesWeather/firstLoading', async (arg, thunkAPI) => {
-//     const {dispatch, rejectWithValue} = thunkAPI
-//     dispatch(appActions.setAppStatus({status: "loading"}))
-//
-//     try {
-//         dispatch(citiesWeatherActions.setCities({cities: arg}))
-//         arg.forEach(t => dispatch(citiesWeatherThunks.getSummaryWeather(t)))
-//         dispatch(appActions.setAppStatus({status: "idle"}))
-//
-//     } catch (e) {
-//         return rejectWithValue(null)
-//     }
-// })
+const changeLang = createAsyncThunk<any, LangType>('citiesWeather/changeLang', async (arg, thunkAPI) => {
+    const {dispatch, rejectWithValue} = thunkAPI
+    dispatch(appActions.setAppStatus({status: "loading"}))
+
+    try {
+        await citiesWeatherAPI.getLang(arg)
+
+        dispatch(appActions.setAppStatus({status: "idle"}))
+        dispatch(citiesWeatherThunks.getSummaryWeather({location: arg.id}))
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})
 
 export const slice = createSlice({
     name: 'citiesWeather',
@@ -85,4 +82,4 @@ export const slice = createSlice({
 
 export const citiesWeatherReducer = slice.reducer;
 export const citiesWeatherActions = slice.actions;
-export const citiesWeatherThunks = {getSummaryWeather, findCity}
+export const citiesWeatherThunks = {getSummaryWeather, findCity, changeLang}

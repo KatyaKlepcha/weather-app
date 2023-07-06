@@ -1,5 +1,5 @@
 import {RootState} from "../../app/store";
-import {CitiesWeatherType} from "../../features/CitiesWeather/citiesWeather.slice";
+import {CitiesWeatherType} from "../../features/citiesWeather/citiesWeather.slice";
 
 export const loadState = () => {
     try {
