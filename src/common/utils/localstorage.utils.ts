@@ -1,4 +1,3 @@
-import {RootState} from "../../app/store";
 import {CitiesWeatherType} from "../../features/citiesWeather/citiesWeather.slice";
 
 export const loadState = () => {
@@ -13,7 +12,8 @@ export const loadState = () => {
     }
 };
 
-export const saveState = (state: CitiesWeatherType ) => {
+// export const saveState = (state: CitiesWeatherType ) => {
+export const saveState = (state: {} ) => {
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('cities', serializedState);

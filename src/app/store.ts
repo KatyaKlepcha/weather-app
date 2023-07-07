@@ -8,15 +8,16 @@ export const store = configureStore({
         app: appReducer,
         citiesWeather: citiesWeatherReducer
     },
-    preloadedState: {citiesWeather: {citiesWeather:loadState()}}
+    // preloadedState: {citiesWeather: {citiesWeather:loadState()}}
+    // preloadedState: {citiesWeather: loadState()}
 });
 
 
-store.subscribe(() => {
-    saveState({
-        ...store.getState().citiesWeather.citiesWeather
-    });
-});
+// store.subscribe(() => {
+//     saveState({
+//         ...store.getState().citiesWeather
+//     });
+// });
 
 
 export type AppDispatch = typeof store.dispatch;
