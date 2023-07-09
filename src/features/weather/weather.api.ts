@@ -2,7 +2,12 @@ import {instance} from "../../common/constants/instance";
 
 export const weatherApi = {
     getSummary(arg: GetSummaryType) {
-        return instance.get<WeatherResponseType>(`weather?q=${arg.location}&appid=3ead9c6dddebfc8ac892957bcb957604&units=${arg.degrees}&lang=ru`)
+        return instance.get<WeatherResponseType>
+        (`weather?q=${arg.location}&appid=3ead9c6dddebfc8ac892957bcb957604&units=${arg.degrees}&lang=ru`)
+    },
+    getCurrentGeolocation(arg: CoordType) {
+        return instance.get<{ city: FindCityResponseType }>
+        (`reverse?lat=${arg.lat}&lon=${arg.lon}&limit=5&appid=3ead9c6dddebfc8ac892957bcb957604`)
     },
 }
 
@@ -68,4 +73,21 @@ export type WindType = {
     deg: number
     gust: number
     speed: number
+}
+
+export type LangType = {
+    id: string,
+    lang: string
+}
+
+
+export type FindCityResponseType = {
+    coord: CoordType
+    country: string
+    id: number
+    name: string
+    population: number
+    sunrise: number
+    sunset: number
+    timezone: number
 }

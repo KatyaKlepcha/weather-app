@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {LangType} from "../features/citiesWeather/citiesWeather.api";
+import {LangType} from "../features/weather/weather.api";
 
 export type RequestStatusType = "idle" | "loading";
 

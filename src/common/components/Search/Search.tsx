@@ -21,7 +21,7 @@ const Search = () => {
 
     const onAddCity = () => {
         if (searchCity.trim() !== "") {
-            dispatch(citiesWeatherThunks.findCity(searchCity))
+            dispatch(citiesWeatherThunks.getSummaryWeather({location: searchCity, degrees: 'metric', show: true}))
             setSearchCity('')
         } else {
             setError('Enter city name to search')

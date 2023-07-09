@@ -1,28 +1,27 @@
-import React, {FC} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 import s from './City.module.css'
 import close from '../../common/images/close.svg'
 import {tempCalculation} from "../../common/helpers/tempCalculation";
-import {WeatherResponseType} from "../weather/weather.api";
 import {useAppDispatch} from "../../common/hooks/useAppDispatch";
 import {format} from 'date-fns';
+import {citiesWeatherThunks} from "./citiesWeather.slice";
+import {useAppSelector} from "../../common/hooks/useAppSelector";
+import {selectDegrees} from "./cities.selector";
+import {DegreesTempType} from "../weather/weather.api";
 
 type CityPropsType = {
     city: string
-    weather: WeatherResponseType & { degrees: string }
+    degrees: DegreesTempType
 }
 
-const City: FC<CityPropsType> = ({city, weather}) => {
+const City: FC<CityPropsType> = memo(({city, degrees}) => {
+    const weather = useAppSelector(state => state.citiesWeather.city[city])
+    const dispatch = useAppDispatch()
+    const celsius = degrees === 'metric'
+    if (!weather) {
+        return <h1>LOADING</h1>
+    }
 
-    // const [citiesWeather, setCitiesWeather] = useState<{
-    //     city: string,
-    //     weather: WeatherResponseType,
-    //     degrees: DegreesTempType
-    // }>()
-
-    const celsius =  'metric'
-
-    const date = format(weather.dt, 'EEE, d MMMM, HH:mm')
-    const wind = weather.wind
     const temp = weather.main.temp
     const feelsLike = weather.main.feels_like
     const humidity = weather.main.humidity
@@ -34,29 +33,17 @@ const City: FC<CityPropsType> = ({city, weather}) => {
     const weatherIcon = weather.weather[0].icon
 
 
-    const dispatch = useAppDispatch()
-
-    // useEffect(() => {
-    //     dispatch(citiesWeatherThunks.getSummaryWeather({
-    //         location: name,
-    //         degrees: 'metric'
-    //     })).unwrap().then(res => setCitiesWeather(res))
-    //
-    // }, [])
-
     const onCloseHandler = () => {
         // dispatch(citiesWeatherActions.deleteCity({city}))
     }
-    // const onChangeCelsius = () => {
-    //     dispatch(citiesWeatherThunks.getSummaryWeather({
-    //         location: city,
-    //         degrees: 'metric'
-    //     }))
-    // }
+    const onChangeCelsius = () => {
+        dispatch(citiesWeatherThunks.getSummaryWeather({location: city, degrees: 'metric', show: true}))
+    }
 
     const onChangeFahrenheit = () => {
-        // dispatch(citiesWeatherThunks.getSummaryWeather({location: city, degrees: 'imperial'}))
+        dispatch(citiesWeatherThunks.getSummaryWeather({location: city, degrees: 'imperial', show: true}))
     }
+
 
     return (
         // <div>{name}</div>
@@ -83,7 +70,7 @@ const City: FC<CityPropsType> = ({city, weather}) => {
                             <span
                                 className={s.temp}>{temp && tempCalculation(temp)}</span>
                             <span className={s.degrees}><button
-                                // onClick={onChangeCelsius}
+                                onClick={onChangeCelsius}
                                 className={celsius ? s.selectButton : ''}>°C</button> | <button
                                 onClick={onChangeFahrenheit}
                                 className={!celsius ? s.selectButton : ''}>°F</button></span>
@@ -100,6 +87,6 @@ const City: FC<CityPropsType> = ({city, weather}) => {
             </div>
         </div>
     );
-};
+})
 
 export default City;

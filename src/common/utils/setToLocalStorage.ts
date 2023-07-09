@@ -1,3 +1,5 @@
 export const setToLocalStorage = (value: any, key: string) => {
-    localStorage.setItem(key, JSON.stringify(value))
+    const serializedState = JSON.stringify(value)
+    localStorage.setItem(key, serializedState)
+
 }

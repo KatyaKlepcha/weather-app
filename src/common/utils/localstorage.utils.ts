@@ -1,4 +1,4 @@
-import {CitiesWeatherType} from "../../features/citiesWeather/citiesWeather.slice";
+import {CityLocalType} from "../../features/citiesWeather/citiesWeather.slice";
 
 export const loadState = () => {
     try {
@@ -6,14 +6,13 @@ export const loadState = () => {
         if (serializedState === null) {
             return undefined;
         }
-        return JSON.parse(serializedState);
+        return JSON.parse(serializedState) as CityLocalType[];
     } catch (err) {
         return undefined;
     }
 };
 
-// export const saveState = (state: CitiesWeatherType ) => {
-export const saveState = (state: {} ) => {
+export const saveState = (state: CityLocalType[]) => {
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('cities', serializedState);
