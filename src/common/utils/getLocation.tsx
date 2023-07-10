@@ -19,15 +19,17 @@
 //     }
 // }
 
-export const getLocation = async () => {
-    debugger
-    // if (!navigator.geolocation) {
-    //     setStatusLocation && setStatusLocation('Geolocation is not supported by your browser');
-    //     return null
-    // } else {
-    //     setStatusLocation && setStatusLocation('Locating...');
-    await navigator.geolocation.getCurrentPosition((position) => {
-        // setStatusLocation && setStatusLocation(null);
-        return {lat: position.coords.latitude, lon: position.coords.longitude};
+import {citiesWeatherThunks} from "../../features/citiesWeather/citiesWeather.slice";
+import {useAppDispatch} from "../hooks/useAppDispatch";
+
+
+export const getLocation = () => {
+    const dispatch = useAppDispatch();
+    navigator.geolocation.getCurrentPosition((position) => {
+        debugger
+        dispatch(citiesWeatherThunks.getCurrentGeolocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+        }))
     })
 }

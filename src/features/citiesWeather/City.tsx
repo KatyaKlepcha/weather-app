@@ -6,6 +6,10 @@ import {useAppDispatch} from "../../common/hooks/useAppDispatch";
 import {citiesWeatherActions, citiesWeatherThunks} from "./citiesWeather.slice";
 import {useAppSelector} from "../../common/hooks/useAppSelector";
 import {DegreesTempType} from "../weather/weather.api";
+import {format, parse} from 'date-fns';
+import ruLocale from 'date-fns/locale/ru';
+import {formatInTimeZone, toDate, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz';
+
 
 type CityPropsType = {
     city: string
@@ -17,9 +21,24 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
     const dispatch = useAppDispatch()
     const celsius = degrees === 'metric'
 
+
     if (!weather) {
         return <h1>LOADING</h1>
     }
+
+    const today = new Date(weather.dt); // Wed Sep 16 2020 13:25:16
+    const timeZone = 'Europe/Minsk'; // Let's see what time it is Down Under
+    //const timeZone = weather.timezone
+    const timeInBrisbane = zonedTimeToUtc(today, timeZone);
+    const date = format(timeInBrisbane, 'EEE, d MMMM, HH:mm')
+
+    // const today = new Date(weather.dt)
+    // const timeZone = toDate(weather.timezone)
+    //
+    // const timeInBrisbane = zonedTimeToUtc(today, timeZone);
+    // const date = format(timeInBrisbane, 'EEE, d MMMM, HH:mm')
+    // console.log('timeZone', timeZone)
+    // formatInTimeZone(date, timeZone, 'EEE, d MMMM, HH:mm')
 
     const wind = weather.wind.speed
     const temp = weather.main.temp
@@ -51,7 +70,7 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
                     <div className={s.cityWrapper}>
                         <span> {city}, </span>
                         <span>{country}</span>
-                        {/*<div>{date}</div>*/}
+                        <div>{String(date)}</div>
                     </div>
                     <div className={s.descriptionWrapper}>
                         <img src={`http://openweathermap.org/img/w/${weatherIcon}.png`}

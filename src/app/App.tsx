@@ -1,20 +1,38 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import {Outlet} from 'react-router-dom'
 import {useAppSelector} from "../common/hooks/useAppSelector";
 import {selectAppStatus} from "./app.selector";
 import Search from "../common/components/Search/Search";
+import Select from "../common/components/Select/Select";
+import {Suspense} from 'react'
+import {useTransition} from "react";
+
+const locales: LocalesType = {
+    en: {title: 'English'},
+    ru: {title: 'Русский'},
+    ua: {title: 'Український'}
+}
+
+type LocalesType = {
+    [key: string]: { title: string }
+}
 
 
 function App() {
+    const {t, i18n} = useTransition()
     const status = useAppSelector(selectAppStatus)
 
     return (
-        <div className="App">
-            {status === 'loading' && <div>Loading</div>}
-            <Search/>
-            <Outlet/>
-        </div>
+        <Suspense fallback={'...loading'}>
+            <div className="App">
+                {status === 'loading' && <div>Loading</div>}
+                {Object.keys(locales).map(locale => <Select key={locale} onChange={() => i18n.reservedLanguage(locale)}
+                                                            options={locales[locale].title}/>)}
+                <Search/>
+                <Outlet/>
+            </div>
+        </Suspense>
     );
 }
 

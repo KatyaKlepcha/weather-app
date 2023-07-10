@@ -3,6 +3,7 @@ import s from './Select.module.css'
 
 type SelectPropsType = {
     onChange: (value: any) => void
+    options: any
 }
 
 const Select = (props: SelectPropsType) => {
@@ -16,9 +17,9 @@ const Select = (props: SelectPropsType) => {
     return (
         <>
             <select className={s.select}>
-                <option value="1" selected>EN</option>
-                <option value="2">UA</option>
-                <option value="3">RUS</option>
+                <option value="1" selected>{props.options}</option>
+                <option value="2">{props.options}</option>
+                <option value="3">{props.options}</option>
             </select>
         </>
 

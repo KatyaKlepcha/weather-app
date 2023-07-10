@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import {RouterProvider} from "react-router";
 import {router} from "./common/routes/Routes";
+import "./i18n";
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);

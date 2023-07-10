@@ -17,13 +17,12 @@ const Weather = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (!navigator.geolocation) {
-            setStatusLocation && setStatusLocation('Geolocation is not supported by your browser');
-        } else {
-            setStatusLocation && setStatusLocation('Locating...');
-            getLocation()
-                .then((res) => console.log('res', res))
-        }
+        navigator.geolocation.getCurrentPosition((position) => {
+            dispatch(citiesWeatherThunks.getCurrentGeolocation({
+                lat: +position.coords.latitude.toFixed(4),
+                lon: +position.coords.longitude.toFixed(4)
+            }))
+        })
 
 
         cities.forEach(city => dispatch(citiesWeatherThunks.getSummaryWeather({
@@ -33,12 +32,8 @@ const Weather = () => {
     }, [])
 
 
-    const onChangeLang = () => {
-    }
-
     return (
         <div className={s.wrapper}>
-            <Select onChange={onChangeLang}/>
             <div className={s.citiesWrapper}>
                 {cities.map((city) => <City key={city.name} city={city.name} degrees={city.degrees}/>)}
             </div>

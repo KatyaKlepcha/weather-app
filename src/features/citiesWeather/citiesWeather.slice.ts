@@ -35,6 +35,13 @@ export const slice = createSlice({
                 if (index !== -1) state.cityLocal[index].degrees = action.payload.degrees;
                 state.city[action.payload.city] = action.payload.weather
             })
+            .addCase(getCurrentGeolocation.fulfilled, (state, action) => {
+                const index = state.cityLocal.findIndex((city) => city.name === action.payload.name)
+                if (index === -1) {
+                    state.cityLocal.push({name: action.payload.name, degrees:'metric'})
+                }
+                state.city[action.payload.name] = action.payload
+            })
     },
 })
 
@@ -66,13 +73,12 @@ const changeDegrees = createAppAsyncThunk<{
     }
 })
 
-const getCurrentGeolocation = createAsyncThunk<any, CoordType>('citiesWeather/getCurrentGeolocation', async (arg, thunkAPI) => {
+const getCurrentGeolocation = createAsyncThunk<WeatherResponseType, CoordType>('citiesWeather/getCurrentGeolocation', async (arg, thunkAPI) => {
     const {dispatch, rejectWithValue} = thunkAPI
     try {
-        debugger
         const res = await weatherApi.getCurrentGeolocation(arg)
-        console.log('res.data', res.data)
-        return res.data
+        console.log('res', res)
+        return res
     } catch (e) {
         return rejectWithValue(null)
     }

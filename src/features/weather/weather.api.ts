@@ -6,8 +6,8 @@ export const weatherApi = {
         (`weather?q=${arg.location}&appid=3ead9c6dddebfc8ac892957bcb957604&units=${arg.degrees}&lang=ru`)
     },
     getCurrentGeolocation(arg: CoordType) {
-        return instance.get<{ city: FindCityResponseType }>
-        (`reverse?lat=${arg.lat}&lon=${arg.lon}&limit=5&appid=3ead9c6dddebfc8ac892957bcb957604`)
+        return instance.get<WeatherResponseType>
+        (`weather?lat=${arg.lat}&lon=${arg.lon}&appid=3ead9c6dddebfc8ac892957bcb957604&units=metric`).then(res=> res.data)
     },
 }
 
