@@ -3,10 +3,8 @@ import s from './City.module.css'
 import close from '../../common/images/close.svg'
 import {tempCalculation} from "../../common/helpers/tempCalculation";
 import {useAppDispatch} from "../../common/hooks/useAppDispatch";
-import {format} from 'date-fns';
-import {citiesWeatherThunks} from "./citiesWeather.slice";
+import {citiesWeatherActions, citiesWeatherThunks} from "./citiesWeather.slice";
 import {useAppSelector} from "../../common/hooks/useAppSelector";
-import {selectDegrees} from "./cities.selector";
 import {DegreesTempType} from "../weather/weather.api";
 
 type CityPropsType = {
@@ -18,10 +16,12 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
     const weather = useAppSelector(state => state.citiesWeather.city[city])
     const dispatch = useAppDispatch()
     const celsius = degrees === 'metric'
+
     if (!weather) {
         return <h1>LOADING</h1>
     }
 
+    const wind = weather.wind.speed
     const temp = weather.main.temp
     const feelsLike = weather.main.feels_like
     const humidity = weather.main.humidity
@@ -34,14 +34,11 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
 
 
     const onCloseHandler = () => {
-        // dispatch(citiesWeatherActions.deleteCity({city}))
-    }
-    const onChangeCelsius = () => {
-        dispatch(citiesWeatherThunks.getSummaryWeather({location: city, degrees: 'metric', show: true}))
+        dispatch(citiesWeatherActions.deleteCity({city}))
     }
 
-    const onChangeFahrenheit = () => {
-        dispatch(citiesWeatherThunks.getSummaryWeather({location: city, degrees: 'imperial', show: true}))
+    const onChangeTemp = (value: DegreesTempType) => {
+        dispatch(citiesWeatherThunks.changeDegrees({location: city, degrees: value}))
     }
 
 
@@ -69,17 +66,18 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
                         <div className={s.tempWrapper}>
                             <span
                                 className={s.temp}>{temp && tempCalculation(temp)}</span>
-                            <span className={s.degrees}><button
-                                onClick={onChangeCelsius}
-                                className={celsius ? s.selectButton : ''}>°C</button> | <button
-                                onClick={onChangeFahrenheit}
-                                className={!celsius ? s.selectButton : ''}>°F</button></span>
+                            <span className={s.degrees}>
+                                <button onClick={() => onChangeTemp('metric')}
+                                        className={celsius ? s.selectButton : ''}>°C</button>
+                                | <button onClick={() => onChangeTemp('imperial')}
+                                          className={!celsius ? s.selectButton : ''}>°F</button>
+                            </span>
                         </div>
                         <div className={s.feelsLike}>Feels
                             like: {feelsLike && tempCalculation(feelsLike)} {celsius ? '°C' : '°F'}</div>
                     </div>
                     <div className={s.information}>
-                        {/*<div>Wind: {wind}<span className={s.item}>m/s</span></div>*/}
+                        <div>Wind: {wind}<span className={s.item}>m/s</span></div>
                         <div>Humidity: {humidity}<span className={s.item}>%</span></div>
                         <div>Pressure: {pressure}<span className={s.item}>Pa</span></div>
                     </div>
