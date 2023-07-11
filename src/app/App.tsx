@@ -6,7 +6,7 @@ import {selectAppStatus} from "./app.selector";
 import Search from "../common/components/Search/Search";
 import Select from "../common/components/Select/Select";
 import {Suspense} from 'react'
-import {useTransition} from "react";
+import { useTranslation } from 'react-i18next';
 
 const locales: LocalesType = {
     en: {title: 'English'},
@@ -20,14 +20,14 @@ type LocalesType = {
 
 
 function App() {
-    const {t, i18n} = useTransition()
+    const {t, i18n} = useTranslation()
     const status = useAppSelector(selectAppStatus)
 
     return (
         <Suspense fallback={'...loading'}>
             <div className="App">
                 {status === 'loading' && <div>Loading</div>}
-                {Object.keys(locales).map(locale => <Select key={locale} onChange={() => i18n.reservedLanguage(locale)}
+                {Object.keys(locales).map(locale => <Select key={locale} onChange={() => i18n.resolvedLanguage(locale)}
                                                             options={locales[locale].title}/>)}
                 <Search/>
                 <Outlet/>
