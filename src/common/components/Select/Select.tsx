@@ -1,25 +1,26 @@
-import {useState} from "react";
 import s from './Select.module.css'
 
 type SelectPropsType = {
-    onChange: (value: any) => void
-    options: any
+    onChange: (lang: string) => void
+    options: string[]
+    lang: string
 }
 
 const Select = (props: SelectPropsType) => {
-    const [active, setActive] = useState(false)
 
-    const onItemClick = (value: any) => {
+    const onItemClick = (event: any) => {
+        const {value} = event.currentTarget
         props.onChange(value)
     }
 
 
     return (
         <>
-            <select className={s.select}>
-                <option value="1" selected>{props.options}</option>
-                <option value="2">{props.options}</option>
-                <option value="3">{props.options}</option>
+            <select className={s.select} onChange={onItemClick}>
+                {props.options.map((el, index)=> {
+                    const selected = el === props.lang
+                    return <option key={el[index]} selected={selected}>{el}</option>
+                })}
             </select>
         </>
 

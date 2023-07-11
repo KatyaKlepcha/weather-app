@@ -4,12 +4,16 @@ import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {useDebounce} from "../../hooks/useDebounce";
 import {citiesWeatherThunks} from "../../../features/citiesWeather/citiesWeather.slice";
 import {useAppSelector} from "../../hooks/useAppSelector";
+import {useTranslation} from "react-i18next";
 
 const Search = () => {
     const [searchCity, setSearchCity] = useState('')
     const [error, setError] = useState<string | null>(null)
     const debouncedSearchCity = useDebounce(searchCity, 500)
     const cityLocal = useAppSelector(state => state.citiesWeather.cityLocal)
+
+
+    const {t} = useTranslation()
 
     const dispatch = useAppDispatch();
 
@@ -53,7 +57,7 @@ const Search = () => {
         <div className={s.searchContainer}>
             <div>
                 <input className={s.input} onChange={onChangeHandler} value={searchCity} onKeyDown={onKeyDownHandler}/>
-                <button className={s.buttonAdd} onClick={onAddCity}>Add</button>
+                <button className={s.buttonAdd} onClick={onAddCity}>{t("button")}</button>
                 {error && <div className={s.error}>{error}</div>}
             </div>
         </div>

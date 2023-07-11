@@ -8,16 +8,11 @@ i18n
     .use(Backend)
     .use(LanguageDetector)// passes i18n down to react-i18next
     .init({
-        resources: {
-            en: {
-                translation: {
-                    "Welcome to React": "Welcome to React and react-i18next"
-                }
-            }
-        },
-        fallbackLng: "en",
+
+        fallbackLng: "ru",
 
         interpolation: {
             escapeValue: false
         }
     });
+export default i18n;

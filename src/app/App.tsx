@@ -9,26 +9,26 @@ import {Suspense} from 'react'
 import { useTranslation } from 'react-i18next';
 
 const locales: LocalesType = {
-    en: {title: 'English'},
-    ru: {title: 'Русский'},
-    ua: {title: 'Український'}
+    EN: {title: 'English'},
+    RU: {title: 'Русский'},
+    UA: {title: 'Український'}
 }
 
 type LocalesType = {
     [key: string]: { title: string }
 }
 
-
 function App() {
+
     const {t, i18n} = useTranslation()
     const status = useAppSelector(selectAppStatus)
+    const localesKeys =  Object.keys(locales)
 
     return (
         <Suspense fallback={'...loading'}>
             <div className="App">
                 {status === 'loading' && <div>Loading</div>}
-                {Object.keys(locales).map(locale => <Select key={locale} onChange={() => i18n.resolvedLanguage(locale)}
-                                                            options={locales[locale].title}/>)}
+                <Select onChange={(lang: string) => i18n.changeLanguage(lang)} options ={localesKeys} lang={i18n.language} />
                 <Search/>
                 <Outlet/>
             </div>

@@ -9,6 +9,9 @@ export const weatherApi = {
         return instance.get<WeatherResponseType>
         (`weather?lat=${arg.lat}&lon=${arg.lon}&appid=3ead9c6dddebfc8ac892957bcb957604&units=metric`).then(res=> res.data)
     },
+    getForecast(city: string){
+        return instance.get('https://api.openweathermap.org/data/2.5/forecast?q={city_name}& appid=3ead9c6dddebfc8ac892957bcb957604')
+    }
 }
 
 export type DegreesTempType = 'metric' | 'imperial'

@@ -9,6 +9,7 @@ import {DegreesTempType} from "../weather/weather.api";
 import {format, parse} from 'date-fns';
 import ruLocale from 'date-fns/locale/ru';
 import {formatInTimeZone, toDate, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz';
+import {useTranslation} from "react-i18next";
 
 
 type CityPropsType = {
@@ -20,13 +21,13 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
     const weather = useAppSelector(state => state.citiesWeather.city[city])
     const dispatch = useAppDispatch()
     const celsius = degrees === 'metric'
-
+    const {t} = useTranslation()
 
     if (!weather) {
         return <h1>LOADING</h1>
     }
 
-    const today = new Date(weather.dt); // Wed Sep 16 2020 13:25:16
+    const today = new Date(); // Wed Sep 16 2020 13:25:16
     const timeZone = 'Europe/Minsk'; // Let's see what time it is Down Under
     //const timeZone = weather.timezone
     const timeInBrisbane = zonedTimeToUtc(today, timeZone);
@@ -62,14 +63,13 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
 
 
     return (
-        // <div>{name}</div>
         <div className={s.wrapper}>
             <img src={close} alt={close} onClick={onCloseHandler} className={s.iconClose}/>
             <div className={s.container}>
                 <div className={s.cityBlock}>
                     <div className={s.cityWrapper}>
-                        <span> {city}, </span>
-                        <span>{country}</span>
+                        <span> {t("city", {city})}, </span>
+                        <span>{t("country", {country})}</span>
                         <div>{String(date)}</div>
                     </div>
                     <div className={s.descriptionWrapper}>
@@ -92,13 +92,12 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
                                           className={!celsius ? s.selectButton : ''}>°F</button>
                             </span>
                         </div>
-                        <div className={s.feelsLike}>Feels
-                            like: {feelsLike && tempCalculation(feelsLike)} {celsius ? '°C' : '°F'}</div>
+                        <div className={s.feelsLike}>{t("FeelsLike")}: {feelsLike && tempCalculation(feelsLike)} {celsius ? '°C' : '°F'}</div>
                     </div>
                     <div className={s.information}>
-                        <div>Wind: {wind}<span className={s.item}>m/s</span></div>
-                        <div>Humidity: {humidity}<span className={s.item}>%</span></div>
-                        <div>Pressure: {pressure}<span className={s.item}>Pa</span></div>
+                        <div>{t("Wind")}: {wind}<span className={s.item}>m/s</span></div>
+                        <div>{t("Humidity")}: {humidity}<span className={s.item}>%</span></div>
+                        <div>{t("Pressure")}: {pressure}<span className={s.item}>Pa</span></div>
                     </div>
                 </div>
             </div>
