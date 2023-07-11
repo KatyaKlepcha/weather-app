@@ -1,4 +1,4 @@
-import React, {FC, memo, useEffect} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import s from './City.module.css'
 import close from '../../common/images/close.svg'
 import {tempCalculation} from "../../common/helpers/tempCalculation";
@@ -6,10 +6,10 @@ import {useAppDispatch} from "../../common/hooks/useAppDispatch";
 import {citiesWeatherActions, citiesWeatherThunks} from "./citiesWeather.slice";
 import {useAppSelector} from "../../common/hooks/useAppSelector";
 import {DegreesTempType} from "../weather/weather.api";
-import {format, parse} from 'date-fns';
-import ruLocale from 'date-fns/locale/ru';
-import {formatInTimeZone, toDate, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz';
+import {format} from 'date-fns';
+import {zonedTimeToUtc} from 'date-fns-tz';
 import {useTranslation} from "react-i18next";
+import {Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis} from "recharts";
 
 
 type CityPropsType = {
@@ -22,6 +22,18 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
     const dispatch = useAppDispatch()
     const celsius = degrees === 'metric'
     const {t} = useTranslation()
+
+    const [dateForecast, setDateForecast] = useState<any>([])
+    console.log('dateForecast', dateForecast)
+
+    useEffect(() => {
+        dispatch(citiesWeatherThunks.getForecast(city)).unwrap().then(res => {
+            console.log('res', res)
+            if (res) {
+                return setDateForecast(res)
+            }
+        })
+    }, [])
 
     if (!weather) {
         return <h1>LOADING</h1>
@@ -61,6 +73,17 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
         dispatch(citiesWeatherThunks.changeDegrees({location: city, degrees: value}))
     }
 
+    const renderLineChart = (
+        <ResponsiveContainer width="100%" height="100%">
+            <AreaChart width={600} height={300} data={dateForecast}>
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
+                <XAxis dataKey="name"/>
+                <YAxis/>
+                <Area type="monotone" dataKey='temp' stroke="#000000" fill="#8884d8"/>
+            </AreaChart>
+        </ResponsiveContainer>
+    );
+
 
     return (
         <div className={s.wrapper}>
@@ -79,7 +102,7 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
                         <div className={s.description}>{weatherDescription}</div>
                     </div>
                 </div>
-
+                {renderLineChart}
                 <div className={s.temperatureBlock}>
                     <div>
                         <div className={s.tempWrapper}>
@@ -92,7 +115,8 @@ const City: FC<CityPropsType> = memo(({city, degrees}) => {
                                           className={!celsius ? s.selectButton : ''}>°F</button>
                             </span>
                         </div>
-                        <div className={s.feelsLike}>{t("FeelsLike")}: {feelsLike && tempCalculation(feelsLike)} {celsius ? '°C' : '°F'}</div>
+                        <div
+                            className={s.feelsLike}>{t("FeelsLike")}: {feelsLike && tempCalculation(feelsLike)} {celsius ? '°C' : '°F'}</div>
                     </div>
                     <div className={s.information}>
                         <div>{t("Wind")}: {wind}<span className={s.item}>m/s</span></div>

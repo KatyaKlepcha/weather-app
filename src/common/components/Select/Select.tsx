@@ -18,8 +18,7 @@ const Select = (props: SelectPropsType) => {
         <>
             <select className={s.select} onChange={onItemClick}>
                 {props.options.map((el, index)=> {
-                    const selected = el === props.lang
-                    return <option key={el[index]} selected={selected}>{el}</option>
+                    return <option key={el[index]} selected={el === props.lang}>{el}</option>
                 })}
             </select>
         </>

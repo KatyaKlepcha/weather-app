@@ -26,13 +26,14 @@ const Search = () => {
     }
 
     const onAddCity = () => {
-        if (searchCity.trim() !== "") {
+        if (searchCity.trim()) {
             const newSearchCity = searchCity[0].toUpperCase() + searchCity.slice(1);
             const index = cityLocal.findIndex((city) => city.name === newSearchCity)
             if (index === -1) {
                 dispatch(citiesWeatherThunks.getSummaryWeather({
                     location: newSearchCity,
                     degrees: 'metric',
+                    lang: 'en'
                 }))
             } else {
                 setError('A city with the same name has already been found')

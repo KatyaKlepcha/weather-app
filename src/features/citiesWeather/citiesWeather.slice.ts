@@ -3,8 +3,12 @@ import {CoordType, DegreesTempType, GetSummaryType, weatherApi, WeatherResponseT
 import {createAppAsyncThunk} from "../../common/utils/createAppAsyncThunk";
 
 type InitialStateType = {
-    city: { [key: string]: WeatherResponseType }
+    city: CityType
     cityLocal: CityLocalType[]
+}
+
+type CityType = {
+    [key: string]: WeatherResponseType
 }
 
 export type CityLocalType = {
@@ -74,11 +78,20 @@ const changeDegrees = createAppAsyncThunk<{
 })
 
 const getCurrentGeolocation = createAsyncThunk<WeatherResponseType, CoordType>('citiesWeather/getCurrentGeolocation', async (arg, thunkAPI) => {
-    const {dispatch, rejectWithValue} = thunkAPI
+    const {rejectWithValue} = thunkAPI
     try {
         const res = await weatherApi.getCurrentGeolocation(arg)
-        console.log('res', res)
         return res
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})
+
+const getForecast = createAppAsyncThunk<any, string>('citiesWeather/getForecast', async (arg, thunkAPI) => {
+    const {rejectWithValue} = thunkAPI
+    try {
+        const res = await weatherApi.getForecast(arg)
+        return res.data.list.map((el: any)=> ({name: el.dt_txt, temp: el.main.temp}))
     } catch (e) {
         return rejectWithValue(null)
     }
@@ -87,4 +100,4 @@ const getCurrentGeolocation = createAsyncThunk<WeatherResponseType, CoordType>('
 
 export const citiesWeatherReducer = slice.reducer;
 export const citiesWeatherActions = slice.actions;
-export const citiesWeatherThunks = {getSummaryWeather, changeDegrees, getCurrentGeolocation}
+export const citiesWeatherThunks = {getSummaryWeather, changeDegrees, getCurrentGeolocation, getForecast}

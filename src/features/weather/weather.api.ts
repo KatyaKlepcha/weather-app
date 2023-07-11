@@ -1,16 +1,17 @@
 import {instance} from "../../common/constants/instance";
+const APPID = '3ead9c6dddebfc8ac892957bcb957604'
 
 export const weatherApi = {
     getSummary(arg: GetSummaryType) {
         return instance.get<WeatherResponseType>
-        (`weather?q=${arg.location}&appid=3ead9c6dddebfc8ac892957bcb957604&units=${arg.degrees}&lang=ru`)
+        (`weather?q=${arg.location}&appid=${APPID}&units=${arg.degrees}&lang=ru`)
     },
     getCurrentGeolocation(arg: CoordType) {
         return instance.get<WeatherResponseType>
-        (`weather?lat=${arg.lat}&lon=${arg.lon}&appid=3ead9c6dddebfc8ac892957bcb957604&units=metric`).then(res=> res.data)
+        (`weather?lat=${arg.lat}&lon=${arg.lon}&appid=${APPID}&units=metric`).then(res=> res.data)
     },
     getForecast(city: string){
-        return instance.get('https://api.openweathermap.org/data/2.5/forecast?q={city_name}& appid=3ead9c6dddebfc8ac892957bcb957604')
+        return instance.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${APPID}`)
     }
 }
 
@@ -19,6 +20,7 @@ export type DegreesTempType = 'metric' | 'imperial'
 export type GetSummaryType = {
     location: string
     degrees: DegreesTempType
+    lang?: string
 }
 
 export type WeatherResponseType = {
@@ -83,14 +85,18 @@ export type LangType = {
     lang: string
 }
 
+export type ResponseListType={
+    list : ListType[]
+}
 
-export type FindCityResponseType = {
-    coord: CoordType
-    country: string
-    id: number
-    name: string
-    population: number
-    sunrise: number
-    sunset: number
-    timezone: number
+export type ListType = {
+    clouds: CloudsType
+    dt: number
+    dt_txt: string
+    main: MainType
+    pop: number
+    sys: {pod: string}
+    visibility: number
+    weather: WeatherType[]
+    wind: WindType
 }

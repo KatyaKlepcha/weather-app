@@ -20,7 +20,7 @@ const Weather = () => {
 
         cities.forEach(city => dispatch(citiesWeatherThunks.getSummaryWeather({
             location: city.name,
-            degrees: city.degrees,
+            degrees: city.degrees
         })))
     }, [])
 
