@@ -1,10 +1,10 @@
 {
-    "header": "Ласкаво просимо у додаток!",
-    "button": "Додати",
-    "FeelsLike": "Відчувається як",
-    "Wind": "Вітер",
-    "Humidity": "Вологість",
-    "Pressure": "Тиск",
-    "city": "{{ city }}",
-    "country": "{{ country }}"
+  "header": "Ласкаво просимо у додаток!",
+  "button": "Додати",
+  "FeelsLike": "Відчувається як",
+  "Wind": "Вітер",
+  "Humidity": "Вологість",
+  "Pressure": "Тиск",
+  "city": "{{ city }}",
+  "country": "{{ country }}"
 }

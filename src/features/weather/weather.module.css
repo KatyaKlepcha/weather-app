@@ -8,7 +8,7 @@
 }
 
 .citiesWrapper {
-    display: grid;
-    gap: 25px;
-    grid-template-columns: repeat(3, minmax(min-content, max-content))
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px
 }

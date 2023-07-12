@@ -1,10 +1,10 @@
 {
-    "header": "Welcome to the application!",
-    "button": "Add",
-    "FeelsLike": "Feels like",
-    "Wind": "Wind",
-    "Humidity": "Humidity",
-    "Pressure": "Pressure",
-    "city": "{{ city }}",
-    "country": "{{ country }}"
+  "header": "Welcome to the application!",
+  "button": "Add",
+  "FeelsLike": "Feels like",
+  "Wind": "Wind",
+  "Humidity": "Humidity",
+  "Pressure": "Pressure",
+  "city": "{{ city }}",
+  "country": "{{ country }}"
 }

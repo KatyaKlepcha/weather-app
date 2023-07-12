@@ -1,27 +1,27 @@
-.searchContainer{
-    margin-bottom: 40px;
+.searchContainer {
+  margin-bottom: 40px;
 }
 
-.input{
-    height: 30px;
-    box-shadow: 1px 4px 8px 0 rgba(34, 60, 80, 0.2);
-    border: none;
-    width: 50%;
-    border-radius: 4px;
-    padding: 5px;
+.input {
+  height: 30px;
+  box-shadow: 1px 4px 8px 0 rgba(34, 60, 80, 0.2);
+  border: none;
+  width: 50%;
+  border-radius: 4px;
+  padding: 5px;
 }
 
 .buttonAdd {
-    width: 70px;
-    height: 30px;
-    background-color: #124cc7;
-    border: none;
-    color: #fff;
-    border-radius: 4px;
-    margin-left: 10px;
+  width: 70px;
+  height: 30px;
+  background-color: #124cc7;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  margin-left: 10px;
 }
 
 .error {
-    color: red;
-    margin-top: 5px;
+  color: red;
+  margin-top: 5px;
 }

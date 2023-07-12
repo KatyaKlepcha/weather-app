@@ -1,1 +1,1 @@
-export const tempCalculation =(temp: number)=> Math.round(temp)
+export const tempCalculation = (temp: number) => Math.round(temp)
