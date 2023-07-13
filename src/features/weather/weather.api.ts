@@ -3,7 +3,7 @@ import { instance } from 'common/constants/instance'
 export const weatherApi = {
   getSummary(arg: GetSummaryType) {
     return instance.get<WeatherResponseType>(
-      `weather?q=${arg.location}&appid=${process.env.REACT_APP_API_KEY}&units=${arg.degrees}&lang=ru`,
+      `weather?q=${arg.location}&appid=${process.env.REACT_APP_API_KEY}&units=${arg.degrees}&lang=${arg.lang}`,
     )
   },
   getCurrentGeolocation(arg: CoordType) {
@@ -14,7 +14,7 @@ export const weatherApi = {
       .then((res) => res.data)
   },
   getForecast(city: string) {
-    return instance.get<ResponseListType>(`forecast?q=${city}&appid=${process.env.REACT_APP_API_KEY}`)
+    return instance.get<ResponseListType>(`forecast?q=${city}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
   },
 }
 
@@ -73,8 +73,8 @@ export type CoordType = {
 export type SysType = {
   country: string
   id: number
-  sunrise: number //timestamp
-  sunset: number //timestamp
+  sunrise: number
+  sunset: number
   type: number
 }
 

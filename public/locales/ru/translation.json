@@ -5,6 +5,6 @@
   "Wind": "Ветер",
   "Humidity": "Влажность",
   "Pressure": "Давление",
-  "city": "{{ city }}",
+  "cityName": "{{ cityName }}",
   "country": "{{ country }}"
 }

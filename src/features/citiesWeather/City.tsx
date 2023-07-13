@@ -1,16 +1,15 @@
 import React, { FC, memo, useEffect, useState } from 'react'
 import { ReactComponent as CloseIcon } from 'assets/images/closeIcon.svg'
 import s from './City.module.css'
-import { citiesWeatherActions, citiesWeatherThunks, CityLocalType } from './citiesWeather.slice'
+import { citiesWeatherActions, citiesWeatherThunks, CityLocalType, PartListType } from './citiesWeather.slice'
 import { DegreesTempType } from '../weather/weather.api'
 import { format } from 'date-fns'
-import { zonedTimeToUtc } from 'date-fns-tz'
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import { useTranslation } from 'react-i18next'
-import { Area, AreaChart, ResponsiveContainer, XAxis } from 'recharts'
+import { Area, AreaChart, LabelList, ResponsiveContainer, XAxis } from 'recharts'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { tempCalculation } from 'common/helpers/tempCalculation'
 import { useAppSelector } from 'common/hooks/useAppSelector'
-import { ru, enUS } from 'date-fns/locale'
 
 type CityPropsType = {
   city: CityLocalType
@@ -23,7 +22,7 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
   const celsius = degrees === 'metric'
   const { t, i18n } = useTranslation()
 
-  const [dateForecast, setDateForecast] = useState([])
+  const [dateForecast, setDateForecast] = useState<PartListType[]>([])
 
   useEffect(() => {
     dispatch(citiesWeatherThunks.getForecast(city.name))
@@ -39,16 +38,15 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
     return <h1>LOADING</h1>
   }
 
-  const today1 = format(new Date(), 'EEE, MMM')
   const today = new Date()
   const timeZone = 'Europe/Minsk'
   //const timeZone = weather.timezone
-  const timeInBrisbane = zonedTimeToUtc(today, timeZone)
+  const timeInBrisbane = utcToZonedTime(today, timeZone)
 
   const date = format(timeInBrisbane, 'EEE, d MMMM, HH:mm')
 
   const wind = weather.wind.speed
-  const temp = weather.main.temp
+  const temp = tempCalculation(weather.main.temp)
   const feelsLike = weather.main.feels_like
   const humidity = weather.main.humidity
   const pressure = weather.main.pressure
@@ -69,21 +67,16 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
     <ResponsiveContainer width="100%" height="100%" className={s.rechartsContainer}>
       <AreaChart width={600} height={300} data={dateForecast}>
         <XAxis dataKey="date" className={s.chart} />
-        <Area
-          type="monotone"
-          dataKey="temp"
-          stroke="none"
-          fill="#ffc0cb"
-          className={s.area}
-          // label={renderCustomBarLabel}
-        />
+        <Area type="monotone" dataKey="temp" stroke="none" fill="#F4A460" className={s.area}>
+          <LabelList dataKey="temp" position="top" className={s.label} />
+        </Area>
       </AreaChart>
     </ResponsiveContainer>
   )
 
   return (
     <div className={s.wrapper}>
-      <div className={s.iconClose}>
+      <div className={s.iconClose} onClick={onCloseHandler}>
         <CloseIcon onClick={onCloseHandler} className={s.iconClose} fill={'#808080'} />
       </div>
       <div className={s.container}>
@@ -102,7 +95,7 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
         <div className={s.temperatureBlock}>
           <div>
             <div className={s.tempWrapper}>
-              <span className={s.temp}>{temp && tempCalculation(temp)}</span>
+              <span className={s.temp}>{temp}</span>
               <span className={s.degrees}>
                 <button onClick={() => onChangeTemp('metric')} className={celsius ? s.selectButton : ''}>
                   °C
@@ -120,15 +113,15 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
           <div className={s.information}>
             <div>
               {t('Wind')}: {wind}
-              <span className={s.item}>m/s</span>
+              <span className={temp > 0 ? s.item : s.itemNeg}>m/s</span>
             </div>
             <div>
               {t('Humidity')}: {humidity}
-              <span className={s.item}>%</span>
+              <span className={temp ? s.item : s.itemNeg}>%</span>
             </div>
             <div>
               {t('Pressure')}: {pressure}
-              <span className={s.item}>Pa</span>
+              <span className={temp ? s.item : s.itemNeg}>Pa</span>
             </div>
           </div>
         </div>

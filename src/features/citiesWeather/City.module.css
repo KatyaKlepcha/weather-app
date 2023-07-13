@@ -30,7 +30,11 @@
 }
 
 .area g g path {
-    box-shadow: 12px 29px 81px 0px rgba(0,0,0,0.75)
+    box-shadow: 12px 29px 81px 0 rgba(0, 0, 0, 0.75);
+}
+
+.label {
+    font-size: 9px;
 }
 
 .cityWrapper span {
@@ -100,6 +104,10 @@
 
 .item {
     color: orangered;
+}
+
+.itemNeg {
+    color: blue;
 }
 
 .chart g line {

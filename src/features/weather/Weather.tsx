@@ -5,10 +5,12 @@ import s from './weather.module.css'
 import { citiesWeatherThunks, CityLocalType } from '../citiesWeather/citiesWeather.slice'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { selectCityLocal } from 'features/citiesWeather/cities.selector'
+import { useTranslation } from 'react-i18next'
 
 const Weather = () => {
   const cities: CityLocalType[] = useAppSelector(selectCityLocal)
   const dispatch = useAppDispatch()
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -25,6 +27,7 @@ const Weather = () => {
         citiesWeatherThunks.getSummaryWeather({
           location: city.name,
           degrees: city.degrees,
+          lang: i18n.language,
         }),
       ),
     )

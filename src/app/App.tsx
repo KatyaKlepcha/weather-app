@@ -6,6 +6,7 @@ import { selectAppStatus } from './app.selector'
 import Search from '../common/components/Search/Search'
 import Select from '../common/components/Select/Select'
 import { useTranslation } from 'react-i18next'
+import Loader from 'common/components/Loader/Loader'
 
 const locales: LocalesType = {
   EN: { title: 'English' },
@@ -29,7 +30,7 @@ function App() {
   return (
     <Suspense fallback={'...loading'}>
       <div className="App">
-        {status === 'loading' && <div>Loading</div>}
+        {status === 'loading' && <Loader />}
         <Select onChange={onChangeHandler} options={localesKeys} lang={i18n.language} />
         <Search />
         <Outlet />

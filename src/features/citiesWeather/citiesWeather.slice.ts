@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CoordType, DegreesTempType, GetSummaryType, weatherApi, WeatherResponseType } from '../weather/weather.api'
+import {
+  CoordType,
+  DegreesTempType,
+  GetSummaryType,
+  ListType,
+  weatherApi,
+  WeatherResponseType,
+} from '../weather/weather.api'
 import { createAppAsyncThunk } from 'common/utils/createAppAsyncThunk'
 import { format } from 'date-fns'
 
@@ -66,10 +73,10 @@ const getSummaryWeather = createAppAsyncThunk<
     degrees: DegreesTempType
   },
   GetSummaryType
->('citiesWeather/getSummaryWeather', async ({ location, degrees }, { rejectWithValue }) => {
+>('citiesWeather/getSummaryWeather', async ({ location, degrees, lang }, { rejectWithValue }) => {
   try {
-    const { data } = await weatherApi.getSummary({ location, degrees } as GetSummaryType)
-    return { city: location, weather: data, degrees: degrees, id: data.id }
+    const { data } = await weatherApi.getSummary({ location, degrees, lang } as GetSummaryType)
+    return { city: location, weather: data, degrees: degrees, id: data.id, lang }
   } catch (e) {
     return rejectWithValue(null)
   }
@@ -102,22 +109,25 @@ const getCurrentGeolocation = createAsyncThunk<WeatherResponseType, CoordType>(
   },
 )
 
-const getForecast = createAppAsyncThunk<any, string>('citiesWeather/getForecast', async (arg, { rejectWithValue }) => {
-  try {
-    const { data } = await weatherApi.getForecast(arg)
-    return data.list.map((el: any) => {
-      const dateChart = format(new Date(el.dt_txt), 'dd.MM')
-      return { date: dateChart, temp: el.main.temp }
-    })
-  } catch (e) {
-    return rejectWithValue(null)
-  }
-})
+const getForecast = createAppAsyncThunk<PartListType[], string>(
+  'citiesWeather/getForecast',
+  async (arg, { rejectWithValue }) => {
+    try {
+      const { data } = await weatherApi.getForecast(arg)
+      return data.list.map((el: ListType) => {
+        const dateChart = format(new Date(el.dt_txt), 'dd.MM')
+        return { date: dateChart, temp: Math.round(el.main.temp) }
+      })
+    } catch (e) {
+      return rejectWithValue(null)
+    }
+  },
+)
 
-// type PartListType = {
-//   date: string
-//   temp: number
-// }
+export type PartListType = {
+  date: string
+  temp: number
+}
 
 export const citiesWeatherReducer = slice.reducer
 export const citiesWeatherActions = slice.actions

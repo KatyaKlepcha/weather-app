@@ -5,6 +5,6 @@
   "Wind": "Wind",
   "Humidity": "Humidity",
   "Pressure": "Pressure",
-  "city": "{{ city }}",
+  "cityName": "{{ cityName }}",
   "country": "{{ country }}"
 }

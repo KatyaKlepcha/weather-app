@@ -5,14 +5,15 @@ import { useDebounce } from '../../hooks/useDebounce'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useTranslation } from 'react-i18next'
 import { citiesWeatherThunks } from 'features/citiesWeather/citiesWeather.slice'
+import { selectCityLocal } from 'features/citiesWeather/cities.selector'
 
 const Search = () => {
   const [searchCity, setSearchCity] = useState('')
   const [error, setError] = useState<string | null>(null)
   const debouncedSearchCity = useDebounce(searchCity, 500)
-  const cityLocal = useAppSelector((state) => state.citiesWeather.cityLocal)
+  const cityLocal = useAppSelector(selectCityLocal)
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const dispatch = useAppDispatch()
 
@@ -32,7 +33,7 @@ const Search = () => {
           citiesWeatherThunks.getSummaryWeather({
             location: newSearchCity,
             degrees: 'metric',
-            lang: 'en',
+            lang: i18n.language,
           }),
         )
       } else {
