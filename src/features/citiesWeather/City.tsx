@@ -63,9 +63,16 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
     dispatch(citiesWeatherThunks.changeDegrees({ location: city.name, degrees: value }))
   }
 
+  const uniqueDataForecast = dateForecast.reduce((acc: { date: string; temp: number }[], cur) => {
+    if (!acc.some((item) => item.temp === cur.temp)) {
+      acc.push(cur)
+    }
+    return acc
+  }, [])
+
   const renderLineChart = (
     <ResponsiveContainer width="100%" height="100%" className={s.rechartsContainer}>
-      <AreaChart width={600} height={300} data={dateForecast}>
+      <AreaChart width={600} height={300} data={uniqueDataForecast}>
         <XAxis dataKey="date" className={s.chart} />
         <Area type="monotone" dataKey="temp" stroke="none" fill="#F4A460" className={s.area}>
           <LabelList dataKey="temp" position="top" className={s.label} />
