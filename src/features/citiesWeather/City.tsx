@@ -4,7 +4,7 @@ import s from './City.module.css'
 import { citiesWeatherActions, citiesWeatherThunks, CityLocalType, PartListType } from './citiesWeather.slice'
 import { DegreesTempType } from '../weather/weather.api'
 import { format } from 'date-fns'
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
+import { utcToZonedTime } from 'date-fns-tz'
 import { useTranslation } from 'react-i18next'
 import { Area, AreaChart, LabelList, ResponsiveContainer, XAxis } from 'recharts'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
@@ -40,7 +40,6 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
 
   const today = new Date()
   const timeZone = 'Europe/Minsk'
-  //const timeZone = weather.timezone
   const timeInBrisbane = utcToZonedTime(today, timeZone)
 
   const date = format(timeInBrisbane, 'EEE, d MMMM, HH:mm')
