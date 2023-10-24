@@ -4,7 +4,5 @@
   "FeelsLike": "Feels like",
   "Wind": "Wind",
   "Humidity": "Humidity",
-  "Pressure": "Pressure",
-  "cityName": "{{ cityName }}",
-  "country": "{{ country }}"
+  "Pressure": "Pressure"
 }

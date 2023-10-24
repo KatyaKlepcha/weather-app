@@ -1,5 +1,5 @@
 .wrapper {
-    width: 350px;
+    width: 365px;
     height: 320px;
     border-radius: 2px;
     padding: 11px;
@@ -7,6 +7,11 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #ffa50017;
+}
+
+.wrapperNeg{
+    background-color: #0000ff08;
 }
 
 .container {
@@ -25,18 +30,6 @@
     text-align: start;
 }
 
-.rechartsContainer {
-    height: 150px !important;
-}
-
-.area g g path {
-    box-shadow: 12px 29px 81px 0 rgba(0, 0, 0, 0.75);
-}
-
-.label {
-    font-size: 9px;
-}
-
 .cityWrapper span {
     font-weight: 500;
 }
@@ -44,6 +37,7 @@
 .descriptionWrapper {
     display: flex;
     align-items: center;
+    margin-right: 25px;
 }
 
 .description {
@@ -108,12 +102,4 @@
 
 .itemNeg {
     color: blue;
-}
-
-.chart g line {
-    stroke: none;
-}
-
-.chart line {
-    stroke: none;
 }

@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react'
 import City from '../citiesWeather/City'
-import { useAppSelector } from 'common/hooks/useAppSelector'
 import s from './weather.module.css'
 import { citiesWeatherThunks, CityLocalType } from '../citiesWeather/citiesWeather.slice'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { selectCityLocal } from 'features/citiesWeather/cities.selector'
 import { useTranslation } from 'react-i18next'
+import { useInitData } from 'common/hooks/useInitData'
 
 const Weather = () => {
-  const cities: CityLocalType[] = useAppSelector(selectCityLocal)
+  const cities: CityLocalType[] = useInitData()
   const dispatch = useAppDispatch()
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
+  // const data = useInitData()
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      dispatch(
-        citiesWeatherThunks.getCurrentGeolocation({
-          lat: +position.coords.latitude.toFixed(4),
-          lon: +position.coords.longitude.toFixed(4),
-        }),
-      )
-    })
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   dispatch(
+    //     citiesWeatherThunks.getCurrentGeolocation({
+    //       lat: +position.coords.latitude.toFixed(4),
+    //       lng: +position.coords.longitude.toFixed(4),
+    //     }),
+    //   )
+    // })
 
     cities.forEach((city) =>
       dispatch(

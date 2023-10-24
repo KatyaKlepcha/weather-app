@@ -4,7 +4,5 @@
   "FeelsLike": "Відчувається як",
   "Wind": "Вітер",
   "Humidity": "Вологість",
-  "Pressure": "Тиск",
-  "cityName": "{{ cityName }}",
-  "country": "{{ country }}"
+  "Pressure": "Тиск"
 }

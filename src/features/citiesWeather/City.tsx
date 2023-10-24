@@ -6,10 +6,13 @@ import { DegreesTempType } from '../weather/weather.api'
 import { format } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
 import { useTranslation } from 'react-i18next'
-import { Area, AreaChart, LabelList, ResponsiveContainer, XAxis } from 'recharts'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { tempCalculation } from 'common/helpers/tempCalculation'
 import { useAppSelector } from 'common/hooks/useAppSelector'
+import ForecastAriaChart from 'common/components/ForecastAreaChart/ForecastAreaChart'
+import { getIsAbove, getLocaleDate } from 'common/utils/data-utils'
+import { LangsType } from 'features/citiesWeather/cities.selector'
+import { useNameTranslate } from 'common/hooks/useNameTranslate'
 
 type CityPropsType = {
   city: CityLocalType
@@ -21,6 +24,8 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
   const dispatch = useAppDispatch()
   const celsius = degrees === 'metric'
   const { t, i18n } = useTranslation()
+  const cityName = useNameTranslate(city, i18n.languages[0])
+  // console.log('i18n.languages[0]', i18n.languages[0])
 
   const [dateForecast, setDateForecast] = useState<PartListType[]>([])
 
@@ -33,10 +38,7 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
         }
       })
   }, [])
-
-  if (!weather) {
-    return <h1>LOADING</h1>
-  }
+  if (!weather) return null
 
   const today = new Date()
   const timeZone = 'Europe/Minsk'
@@ -51,8 +53,9 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
   const pressure = weather.main.pressure
   const country = weather.sys.country
 
-  const weatherDescription = weather.weather[0].main
+  const weatherDescription = weather.weather[0].description
   const weatherIcon = weather.weather[0].icon
+  const isAbove = getIsAbove(temp, city.degrees)
 
   const onCloseHandler = () => {
     dispatch(citiesWeatherActions.deleteCity({ city: city.name }))
@@ -69,35 +72,22 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
     return acc
   }, [])
 
-  const renderLineChart = (
-    <ResponsiveContainer width="100%" height="100%" className={s.rechartsContainer}>
-      <AreaChart width={600} height={300} data={uniqueDataForecast}>
-        <XAxis dataKey="date" className={s.chart} />
-        <Area type="monotone" dataKey="temp" stroke="none" fill="#F4A460" className={s.area}>
-          <LabelList dataKey="temp" position="top" className={s.label} />
-        </Area>
-      </AreaChart>
-    </ResponsiveContainer>
-  )
-
   return (
-    <div className={s.wrapper}>
-      <div className={s.iconClose} onClick={onCloseHandler}>
-        <CloseIcon onClick={onCloseHandler} className={s.iconClose} fill={'#808080'} />
-      </div>
+    <div className={temp > 0 ? s.wrapper : s.wrapper + ' ' + s.wrapperNeg}>
+      <CloseIcon onClick={onCloseHandler} className={s.iconClose} fill={'#808080'} />
       <div className={s.container}>
         <div className={s.cityBlock}>
           <div className={s.cityWrapper}>
-            <span> {city.name}, </span>
-            <span>{t('country', { country })}</span>
-            <div>{String(date)}</div>
+            <span> {cityName}, </span>
+            <span>{country}</span>
+            <div>{getLocaleDate(weather.dt, i18n.languages[0])}</div>
           </div>
           <div className={s.descriptionWrapper}>
             <img src={`http://openweathermap.org/img/w/${weatherIcon}.png`} alt={'weather'} className={s.icon} />
             <div className={s.description}>{weatherDescription}</div>
           </div>
         </div>
-        {renderLineChart}
+        <ForecastAriaChart chartData={uniqueDataForecast} isAbove={isAbove} />
         <div className={s.temperatureBlock}>
           <div>
             <div className={s.tempWrapper}>
@@ -123,11 +113,11 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
             </div>
             <div>
               {t('Humidity')}: {humidity}
-              <span className={temp ? s.item : s.itemNeg}>%</span>
+              <span className={temp > 0 ? s.item : s.itemNeg}>%</span>
             </div>
             <div>
               {t('Pressure')}: {pressure}
-              <span className={temp ? s.item : s.itemNeg}>Pa</span>
+              <span className={temp > 0 ? s.item : s.itemNeg}>Pa</span>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ export const weatherApi = {
   getCurrentGeolocation(arg: CoordType) {
     return instance
       .get<WeatherResponseType>(
-        `weather?lat=${arg.lat}&lon=${arg.lon}&appid=${process.env.REACT_APP_API_KEY}&units=metric`,
+        `weather?lat=${arg.lat}&lon=${arg.lng}&appid=${process.env.REACT_APP_API_KEY}&units=metric`,
       )
       .then((res) => res.data)
   },
@@ -18,7 +18,7 @@ export const weatherApi = {
   },
 }
 
-export type DegreesTempType = 'metric' | 'imperial'
+export type DegreesTempType = 'standard' | 'metric' | 'imperial'
 
 export type GetSummaryType = {
   location: string
@@ -67,7 +67,7 @@ export type CloudsType = {
 
 export type CoordType = {
   lat: number
-  lon: number
+  lng: number
 }
 
 export type SysType = {
@@ -84,10 +84,10 @@ export type WindType = {
   speed: number
 }
 
-export type LangType = {
-  id: string
-  lang: string
-}
+// export type LangsType = {
+//   id: string
+//   lang: string
+// }
 
 export type ResponseListType = {
   list: ListType[]

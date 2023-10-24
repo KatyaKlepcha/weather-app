@@ -1,7 +1,7 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import { appReducer } from './app.slice'
-import { citiesWeatherReducer } from '../features/citiesWeather/citiesWeather.slice'
-import { loadState, saveState } from '../common/utils/localstorage.utils'
+import { citiesWeatherReducer } from 'features/citiesWeather/citiesWeather.slice'
+import { loadState, saveState } from 'common/utils/localstorage.utils'
 
 export const store = configureStore({
   reducer: {

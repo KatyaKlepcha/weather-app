@@ -1,26 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LangType } from '../features/weather/weather.api'
+import { LangsType } from 'features/citiesWeather/cities.selector'
 
 export type RequestStatusType = 'idle' | 'loading'
 
+const initialState: { lang: LangsType; error: string | null; status: RequestStatusType } = {
+  lang: 'en',
+  error: null,
+  status: 'idle',
+}
+
 const slice = createSlice({
   name: 'app',
-  initialState: {
-    error: null as string | null,
-    status: 'idle' as RequestStatusType,
-    isInitialized: false,
-    lang: {} as LangType,
-  },
+  initialState,
   reducers: {
-    setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
-      state.status = action.payload.status
+    changeLang: (state, action: PayloadAction<{ lang: LangsType }>) => {
+      state.lang = action.payload.lang
     },
     setAppError: (state, action: PayloadAction<{ error: null | string }>) => {
       state.error = action.payload.error
     },
-    setInitialized: (state, action: PayloadAction<{ initializeStatus: boolean }>) => {
-      state.isInitialized = action.payload.initializeStatus
-    },
+    // setInitialized: (state, action: PayloadAction<{ initializeStatus: boolean }>) => {
+    //   state.isInitialized = action.payload.initializeStatus
+    // },
   },
   extraReducers: (builder) => {
     builder

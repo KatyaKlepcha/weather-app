@@ -1,0 +1,15 @@
+.listItem {
+    padding-left: 7px;
+    margin: 10px 0 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: start;
+}
+
+.listItem:hover {
+    background-color: rgb(233 227 219 / 50%);
+}
+
+.listItem:last-child {
+    margin-bottom: 10px;
+}

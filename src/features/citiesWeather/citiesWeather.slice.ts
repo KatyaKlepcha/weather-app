@@ -15,13 +15,13 @@ type InitialStateType = {
   cityLocal: CityLocalType[]
 }
 
-type CityType = {
+export type CityType = {
   [key: string]: WeatherResponseType
 }
 
 export type CityLocalType = {
   name: string
-  id: number
+  id: string | number
   degrees: DegreesTempType
 }
 export const slice = createSlice({
@@ -32,6 +32,17 @@ export const slice = createSlice({
       delete state.city[action.payload.city]
       const index = state.cityLocal.findIndex((city) => city.name === action.payload.city)
       if (index !== -1) state.cityLocal.splice(index, 1)
+    },
+    addCity: (state, action: PayloadAction<any>) => {
+      console.log('addCity')
+      const index = state.cityLocal.findIndex((city) => {
+        return city.id === action.payload.id
+      })
+      if (index === -1) {
+        state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
+      }
+      state.city[action.payload.name] = action.payload
+      state.city[action.payload.name].id = action.payload.id
     },
   },
   extraReducers: (builder) => {
@@ -53,17 +64,47 @@ export const slice = createSlice({
         if (index !== -1) state.cityLocal[index].degrees = action.payload.degrees
         state.city[action.payload.city] = action.payload.weather
       })
-      .addCase(getCurrentGeolocation.fulfilled, (state, action) => {
-        const index = state.cityLocal.findIndex((city) => {
-          return city.id === action.payload.id
-        })
-        if (index === -1) {
-          state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
-        }
-        state.city[action.payload.name] = action.payload
-        state.city[action.payload.name].id = action.payload.id
-      })
+    // .addCase(getCurrentGeolocation.fulfilled, (state, action) => {
+    //   const index = state.cityLocal.findIndex((city) => {
+    //     return city.id === action.payload.id
+    //   })
+    //   if (index === -1) {
+    //     state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
+    //   }
+    //   state.city[action.payload.name] = action.payload
+    //   state.city[action.payload.name].id = action.payload.id
+    // })
   },
+  // extraReducers: (builder) => {
+  //   builder
+  //     // .addCase(getSummaryWeather.fulfilled, (state, action) => {
+  //     //   const index = state.cityLocal.findIndex((city) => city.id === action.payload.weather.id)
+  //     //   if (index === -1) {
+  //     //     state.cityLocal.push({
+  //     //       name: action.payload.weather.name,
+  //     //       degrees: action.payload.degrees,
+  //     //       id: action.payload.weather.id,
+  //     //     })
+  //     //   }
+  //     //   state.city[action.payload.weather.name] = action.payload.weather
+  //     //   state.city[action.payload.weather.name].id = action.payload.weather.id
+  //     // })
+  //     // .addCase(changeDegrees.fulfilled, (state, action) => {
+  //     //   const index = state.cityLocal.findIndex((city) => city.id === action.payload.weather.id)
+  //     //   if (index !== -1) state.cityLocal[index].degrees = action.payload.degrees
+  //     //   state.city[action.payload.city] = action.payload.weather
+  //     // })
+  //     // .addCase(getCurrentGeolocation.fulfilled, (state, action) => {
+  //     //   const index = state.cityLocal.findIndex((city) => {
+  //     //     return city.id === action.payload.id
+  //     //   })
+  //     //   if (index === -1) {
+  //     //     state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
+  //     //   }
+  //     //   state.city[action.payload.name] = action.payload
+  //     //   state.city[action.payload.name].id = action.payload.id
+  //     // })
+  // },
 })
 
 const getSummaryWeather = createAppAsyncThunk<
