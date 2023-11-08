@@ -9,6 +9,7 @@ import {
 } from '../weather/weather.api'
 import { createAppAsyncThunk } from 'common/utils/createAppAsyncThunk'
 import { format } from 'date-fns'
+import { LangsType } from 'features/citiesWeather/cities.selector'
 
 type InitialStateType = {
   city: CityType
@@ -21,8 +22,9 @@ export type CityType = {
 
 export type CityLocalType = {
   name: string
-  id: string | number
+  id?: string | number
   degrees: DegreesTempType
+  lang?: string | LangsType
 }
 export const slice = createSlice({
   name: 'citiesWeather',
@@ -33,78 +35,30 @@ export const slice = createSlice({
       const index = state.cityLocal.findIndex((city) => city.name === action.payload.city)
       if (index !== -1) state.cityLocal.splice(index, 1)
     },
-    addCity: (state, action: PayloadAction<any>) => {
-      console.log('addCity')
-      const index = state.cityLocal.findIndex((city) => {
-        return city.id === action.payload.id
-      })
-      if (index === -1) {
-        state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
-      }
-      state.city[action.payload.name] = action.payload
-      state.city[action.payload.name].id = action.payload.id
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getSummaryWeather.fulfilled, (state, action) => {
-        const index = state.cityLocal.findIndex((city) => city.id === action.payload.weather.id)
+        const index = state.cityLocal.findIndex((city) => {
+          return city.id === action.payload.id
+        })
+
         if (index === -1) {
           state.cityLocal.push({
             name: action.payload.weather.name,
             degrees: action.payload.degrees,
-            id: action.payload.weather.id,
+            id: action.payload.id,
+            lang: action.payload.lang,
           })
         }
         state.city[action.payload.weather.name] = action.payload.weather
-        state.city[action.payload.weather.name].id = action.payload.weather.id
       })
       .addCase(changeDegrees.fulfilled, (state, action) => {
-        const index = state.cityLocal.findIndex((city) => city.id === action.payload.weather.id)
+        const index = state.cityLocal.findIndex((city) => city.id === action.payload.id)
         if (index !== -1) state.cityLocal[index].degrees = action.payload.degrees
         state.city[action.payload.city] = action.payload.weather
       })
-    // .addCase(getCurrentGeolocation.fulfilled, (state, action) => {
-    //   const index = state.cityLocal.findIndex((city) => {
-    //     return city.id === action.payload.id
-    //   })
-    //   if (index === -1) {
-    //     state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
-    //   }
-    //   state.city[action.payload.name] = action.payload
-    //   state.city[action.payload.name].id = action.payload.id
-    // })
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     // .addCase(getSummaryWeather.fulfilled, (state, action) => {
-  //     //   const index = state.cityLocal.findIndex((city) => city.id === action.payload.weather.id)
-  //     //   if (index === -1) {
-  //     //     state.cityLocal.push({
-  //     //       name: action.payload.weather.name,
-  //     //       degrees: action.payload.degrees,
-  //     //       id: action.payload.weather.id,
-  //     //     })
-  //     //   }
-  //     //   state.city[action.payload.weather.name] = action.payload.weather
-  //     //   state.city[action.payload.weather.name].id = action.payload.weather.id
-  //     // })
-  //     // .addCase(changeDegrees.fulfilled, (state, action) => {
-  //     //   const index = state.cityLocal.findIndex((city) => city.id === action.payload.weather.id)
-  //     //   if (index !== -1) state.cityLocal[index].degrees = action.payload.degrees
-  //     //   state.city[action.payload.city] = action.payload.weather
-  //     // })
-  //     // .addCase(getCurrentGeolocation.fulfilled, (state, action) => {
-  //     //   const index = state.cityLocal.findIndex((city) => {
-  //     //     return city.id === action.payload.id
-  //     //   })
-  //     //   if (index === -1) {
-  //     //     state.cityLocal.push({ name: action.payload.name, degrees: 'metric', id: action.payload.id })
-  //     //   }
-  //     //   state.city[action.payload.name] = action.payload
-  //     //   state.city[action.payload.name].id = action.payload.id
-  //     // })
-  // },
 })
 
 const getSummaryWeather = createAppAsyncThunk<
@@ -112,12 +66,14 @@ const getSummaryWeather = createAppAsyncThunk<
     city: string
     weather: WeatherResponseType
     degrees: DegreesTempType
+    id?: string | number
+    lang?: string | LangsType
   },
   GetSummaryType
->('citiesWeather/getSummaryWeather', async ({ location, degrees, lang }, { rejectWithValue }) => {
+>('citiesWeather/getSummaryWeather', async ({ location, degrees, lang, id }, { rejectWithValue }) => {
   try {
-    const { data } = await weatherApi.getSummary({ location, degrees, lang } as GetSummaryType)
-    return { city: location, weather: data, degrees: degrees, id: data.id, lang }
+    const { data } = await weatherApi.getSummary({ location, degrees, lang, id } as GetSummaryType)
+    return { city: location, weather: data, degrees: degrees, id, lang }
   } catch (e) {
     return rejectWithValue(null)
   }
@@ -128,12 +84,13 @@ const changeDegrees = createAppAsyncThunk<
     city: string
     weather: WeatherResponseType
     degrees: DegreesTempType
+    id?: string | number
   },
   GetSummaryType
->('citiesWeather/changeDegrees', async ({ location, degrees }, { rejectWithValue }) => {
+>('citiesWeather/changeDegrees', async ({ location, degrees, id }, { rejectWithValue }) => {
   try {
     const { data } = await weatherApi.getSummary({ location, degrees } as GetSummaryType)
-    return { city: location, weather: data, degrees }
+    return { city: location, weather: data, degrees, id }
   } catch (e) {
     return rejectWithValue(null)
   }

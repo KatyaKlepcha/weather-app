@@ -10,28 +10,21 @@ const Weather = () => {
   const cities: CityLocalType[] = useInitData()
   const dispatch = useAppDispatch()
   const { i18n } = useTranslation()
-  // const data = useInitData()
+  // console.log('cities*****', cities)
+  // console.log('LANG', i18n.language)
 
   useEffect(() => {
-    // navigator.geolocation.getCurrentPosition((position) => {
-    //   dispatch(
-    //     citiesWeatherThunks.getCurrentGeolocation({
-    //       lat: +position.coords.latitude.toFixed(4),
-    //       lng: +position.coords.longitude.toFixed(4),
-    //     }),
-    //   )
-    // })
-
     cities.forEach((city) =>
       dispatch(
         citiesWeatherThunks.getSummaryWeather({
           location: city.name,
           degrees: city.degrees,
           lang: i18n.language,
+          id: city.id,
         }),
       ),
     )
-  }, [])
+  }, [i18n.language])
 
   return (
     <div className={s.wrapper}>

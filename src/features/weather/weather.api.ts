@@ -24,7 +24,7 @@ export type GetSummaryType = {
   location: string
   degrees: DegreesTempType
   lang?: string
-  id?: number
+  id?: number | string
 }
 
 export type WeatherResponseType = {

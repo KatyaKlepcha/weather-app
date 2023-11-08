@@ -24,17 +24,7 @@ function ForecastAriaChart({ chartData, isAbove }: ForecastAriaChartProps): JSX.
 
   const positiveNumbers: number[] = []
   const negativeNumbers: number[] = []
-  //
-  // console.log('positiveNumbers', positiveNumbers)
-  // console.log(
-  //   'positiveNumbers.every((value) => value >= 0)',
-  //   positiveNumbers.every((value) => value >= 0),
-  // )
-  // console.log('negativeNumbers', negativeNumbers)
-  // console.log(
-  //   'negativeNumbers.every((value) => value <= 0)',
-  //   negativeNumbers.every((value) => value <= 0),
-  // )
+
   // console.log(
   //   'positiveNumbers.every((value) => value >= 0) || negativeNumbers.every((value) => value <= 0)',
   //   positiveNumbers.every((value) => value >= 0) || negativeNumbers.every((value) => value <= 0),
@@ -74,18 +64,22 @@ function ForecastAriaChart({ chartData, isAbove }: ForecastAriaChartProps): JSX.
           type="natural"
           dataKey="temp"
           stroke={positiveNumbers.every((value) => value >= 0) ? 'transparent' : '#459de9'}
+          // fill={
+          //   positiveNumbers.every((value) => value >= 0) && negativeNumbers.every((value) => value <= 0)
+          //     ? 'url(#colorWarm)' && 'url(#colorCold)'
+          //     : positiveNumbers.every((value) => value >= 0)
+          //     ? 'url(#colorWarm)'
+          //     : negativeNumbers.every((value) => value <= 0)
+          //     ? 'url(#colorCold)'
+          //     : ''
+          // }
           fill={
-            positiveNumbers.every((value) => value >= 0) && negativeNumbers.every((value) => value <= 0)
-              ? 'url(#colorWarm)' && 'url(#colorCold)'
-              : positiveNumbers.every((value) => value >= 0)
+            positiveNumbers.every((value) => value >= 0)
               ? 'url(#colorWarm)'
               : negativeNumbers.every((value) => value <= 0)
               ? 'url(#colorCold)'
               : ''
           }
-          // fill={`${positiveNumbers.every((value) => value >= 0) ? 'url(#colorWarm) ' : ''}${
-          //   negativeNumbers.every((value) => value <= 0) ? 'url(#colorCold)' : ''
-          // }`}
           isAnimationActive={false}
         >
           <LabelList dataKey={'temp'} position="insideBottom" className={styles.label} />

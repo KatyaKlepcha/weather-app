@@ -3,10 +3,11 @@ import { LangsType } from 'features/citiesWeather/cities.selector'
 
 export type RequestStatusType = 'idle' | 'loading'
 
-const initialState: { lang: LangsType; error: string | null; status: RequestStatusType } = {
+const initialState: { lang: LangsType; error: string | null; status: RequestStatusType; isChangeLang: boolean } = {
   lang: 'en',
   error: null,
   status: 'idle',
+  isChangeLang: false,
 }
 
 const slice = createSlice({
@@ -15,6 +16,7 @@ const slice = createSlice({
   reducers: {
     changeLang: (state, action: PayloadAction<{ lang: LangsType }>) => {
       state.lang = action.payload.lang
+      state.isChangeLang = true
     },
     setAppError: (state, action: PayloadAction<{ error: null | string }>) => {
       state.error = action.payload.error

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { GetSummaryType, weatherApi, WeatherResponseType } from 'features/weather/weather.api'
 import s from './ListItemFetch.module.css'
+import { citiesWeatherThunks } from 'features/citiesWeather/citiesWeather.slice'
+import { useAppDispatch } from 'common/hooks/useAppDispatch'
 
 type ListItemFetchProps = {
   suggestion: google.maps.places.AutocompletePrediction
@@ -9,11 +11,14 @@ type ListItemFetchProps = {
 
 const ListItemFetch = ({
   suggestion: {
+    place_id,
     structured_formatting: { main_text, secondary_text },
   },
   handleClick,
 }: ListItemFetchProps) => {
   const [data, setData] = useState<null | WeatherResponseType>(null)
+  // console.log('data**********', data)
+  const dispatch = useAppDispatch()
   useEffect(() => {
     weatherApi
       .getSummary({ location: main_text, degrees: 'metric' })
@@ -21,7 +26,14 @@ const ListItemFetch = ({
         setData(data)
       })
       .catch(() => setData(null))
-  }, [main_text])
+    // dispatch(citiesWeatherThunks.getSummaryWeather({ location: main_text, degrees: 'metric' })).then((res: any) => {
+    //   console.log('resRES', res)
+    //   console.log('res', res.payload.weather)
+    //   // if (res.payload) {
+    //   setData(res.payload.weather)
+    //   // }
+    // })
+  }, [dispatch, main_text])
 
   if (!data) return null
 
@@ -30,6 +42,7 @@ const ListItemFetch = ({
       tabIndex={0}
       onClick={() =>
         handleClick({
+          id: place_id,
           location: main_text,
           degrees: 'metric',
         })

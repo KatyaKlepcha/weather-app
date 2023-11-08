@@ -16,6 +16,7 @@ type PropsType = {
 const PlacesAutocomplete: FC<PropsType> = ({ isLoaded }) => {
   const [error, setError] = useState<string | null>(null)
   const [currentCity, setCurrentCity] = useState<GetSummaryType | null>(null)
+  const { i18n } = useTranslation()
 
   const {
     ready,
@@ -56,7 +57,15 @@ const PlacesAutocomplete: FC<PropsType> = ({ isLoaded }) => {
     e.preventDefault()
     const index = cityLocal.findIndex((city) => city.name === currentCity?.location)
     if (currentCity) {
-      dispatch(citiesWeatherThunks.getSummaryWeather(currentCity))
+      console.log('CURRENT_CITY', currentCity)
+      dispatch(
+        citiesWeatherThunks.getSummaryWeather({
+          location: currentCity.location,
+          lang: i18n.language,
+          degrees: 'metric',
+          id: currentCity.id,
+        }),
+      )
     } else {
       setError('Enter city name to search')
     }

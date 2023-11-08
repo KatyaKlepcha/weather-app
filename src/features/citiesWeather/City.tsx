@@ -3,15 +3,12 @@ import { ReactComponent as CloseIcon } from 'assets/images/closeIcon.svg'
 import s from './City.module.css'
 import { citiesWeatherActions, citiesWeatherThunks, CityLocalType, PartListType } from './citiesWeather.slice'
 import { DegreesTempType } from '../weather/weather.api'
-import { format } from 'date-fns'
-import { utcToZonedTime } from 'date-fns-tz'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { tempCalculation } from 'common/helpers/tempCalculation'
 import { useAppSelector } from 'common/hooks/useAppSelector'
 import ForecastAriaChart from 'common/components/ForecastAreaChart/ForecastAreaChart'
 import { getIsAbove, getLocaleDate } from 'common/utils/data-utils'
-import { LangsType } from 'features/citiesWeather/cities.selector'
 import { useNameTranslate } from 'common/hooks/useNameTranslate'
 
 type CityPropsType = {
@@ -25,7 +22,6 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
   const celsius = degrees === 'metric'
   const { t, i18n } = useTranslation()
   const cityName = useNameTranslate(city, i18n.languages[0])
-  // console.log('i18n.languages[0]', i18n.languages[0])
 
   const [dateForecast, setDateForecast] = useState<PartListType[]>([])
 
@@ -39,12 +35,6 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
       })
   }, [])
   if (!weather) return null
-
-  const today = new Date()
-  const timeZone = 'Europe/Minsk'
-  const timeInBrisbane = utcToZonedTime(today, timeZone)
-
-  const date = format(timeInBrisbane, 'EEE, d MMMM, HH:mm')
 
   const wind = weather.wind.speed
   const temp = tempCalculation(weather.main.temp)
@@ -62,7 +52,7 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
   }
 
   const onChangeTemp = (value: DegreesTempType) => {
-    dispatch(citiesWeatherThunks.changeDegrees({ location: city.name, degrees: value }))
+    dispatch(citiesWeatherThunks.changeDegrees({ location: city.name, degrees: value, id: city.id }))
   }
 
   const uniqueDataForecast = dateForecast.reduce((acc: { date: string; temp: number }[], cur) => {
