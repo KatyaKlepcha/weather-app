@@ -13,18 +13,17 @@ export const useNameTranslate = (city: CityLocalType, lang: LangsType | string) 
       placeId: String(city.id),
       language: lang,
     }
-    console.log('parameter', parameter)
     if (isChangeLang) {
       getGeocode(parameter)
         .then((results) => {
-          console.log('results', results)
-          setCityName(results[0].address_components[0].long_name)
+          results[0].address_components.filter((res) =>
+            res.types.filter((t) => t === 'locality' && setCityName(res.long_name)),
+          )
         })
         .catch((e) => {
-          // console.log('catch', e)
           setCityName(city.name)
         })
     }
-  }, [city.id, lang])
+  }, [city.name, city.id, lang])
   return cityName
 }

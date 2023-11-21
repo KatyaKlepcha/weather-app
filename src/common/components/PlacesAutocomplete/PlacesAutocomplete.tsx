@@ -31,7 +31,7 @@ const PlacesAutocomplete: FC<PropsType> = ({ isLoaded }) => {
       types: ['(cities)'],
       language: 'en',
     },
-    debounce: 300,
+    debounce: 500,
   })
 
   const cityLocal = useAppSelector(selectCityLocal)

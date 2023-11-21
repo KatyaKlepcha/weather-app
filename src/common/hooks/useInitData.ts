@@ -27,6 +27,12 @@ export const useInitData = () => {
         return getGeocode(parameter)
       })
       .then((results) => {
+        // i18n.language === 'UK'
+        //   ? setCity({
+        //       name: results[6].address_components[0].short_name,
+        //       id: results[0].place_id.split('_')[0],
+        //       degrees: 'metric',
+        //     })
         setCity({
           name: results[0].address_components[3].short_name,
           id: results[0].place_id.split('_')[0],

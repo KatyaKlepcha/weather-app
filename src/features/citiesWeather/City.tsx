@@ -17,14 +17,23 @@ type CityPropsType = {
 }
 
 const City: FC<CityPropsType> = memo(({ city, degrees }) => {
-  const weather = useAppSelector((state) => state.citiesWeather.city[city.name])
-  const dispatch = useAppDispatch()
-  const celsius = degrees === 'metric'
   const { t, i18n } = useTranslation()
   const cityName = useNameTranslate(city, i18n.languages[0])
+  const weather = useAppSelector((state) => state.citiesWeather.city[cityName])
+  const dispatch = useAppDispatch()
+  const celsius = degrees === 'metric'
 
   const [dateForecast, setDateForecast] = useState<PartListType[]>([])
-
+  useEffect(() => {
+    dispatch(
+      citiesWeatherThunks.getSummaryWeather({
+        location: cityName,
+        degrees: city.degrees,
+        lang: i18n.language,
+        id: city.id,
+      }),
+    )
+  }, [i18n.language])
   useEffect(() => {
     dispatch(citiesWeatherThunks.getForecast(city.name))
       .unwrap()
@@ -73,7 +82,7 @@ const City: FC<CityPropsType> = memo(({ city, degrees }) => {
             <div>{getLocaleDate(weather.dt, i18n.languages[0])}</div>
           </div>
           <div className={s.descriptionWrapper}>
-            <img src={`http://openweathermap.org/img/w/${weatherIcon}.png`} alt={'weather'} className={s.icon} />
+            <img src={`https://openweathermap.org/img/w/${weatherIcon}.png`} alt={'weather'} className={s.icon} />
             <div className={s.description}>{weatherDescription}</div>
           </div>
         </div>
